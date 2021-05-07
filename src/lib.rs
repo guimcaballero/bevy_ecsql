@@ -116,7 +116,12 @@ mod tests {
         );
 
         let mut query =
-            ecsql!(world, SELECT (Position, mut Velocity) WHERE ADDED Other, CHANGED Velocity);
+            ecsql!(world, SELECT (mut Position, Velocity) WHERE ADDED Other, CHANGED Velocity);
         assert_eq!(0, query.iter_mut(&mut world).collect::<Vec<_>>().len());
+
+        for (mut position, velocity) in query.iter_mut(&mut world) {
+            position.x += velocity.x;
+            position.y += velocity.y;
+        }
     }
 }
